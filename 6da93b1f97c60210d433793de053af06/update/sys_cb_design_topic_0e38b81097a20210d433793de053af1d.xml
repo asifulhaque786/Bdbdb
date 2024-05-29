@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_cb_design_topic">
+    <sys_cb_design_topic action="INSERT_OR_UPDATE">
+        <compiled_topic display_value="_PRVW__a138b810cba20210a8aebce91514a416">ce38b81097a20210d433793de053af17</compiled_topic>
+        <design_definition>{"type":"FlowTopic","type":"FlowTopic","triggers":[{"type":"Trigger","name":"2eac896bedab4dcb9e32047691792ff0","triggerType":"request","applicability":{"type":"Applicability","type":"Applicability","mode":"script","value":"true"},"id":"2eac896bedab4dcb9e32047691792ff0"}],"goals":[{"name":"primary","trigger_id":"2eac896bedab4dcb9e32047691792ff0","nodes":[{"type":"StartGoal","type":"StartGoal","goal_id":"primary","greeting_msg":{"type":"String","type":"String","mode":"string","value":"gs.getMessageLang(\"va:topic:b04b122b97120210d433793de053af12:node:0162092bc36746eb8744a8e9506d7719:field:GreetingMsg\", vaContext.getRequesterLang())"},"id":"0162092bc36746eb8744a8e9506d7719","name":"Start"},{"type":"TerminateGoal","type":"TerminateGoal","goal_id":"primary","confirmation_msg":{"type":"String","type":"String","mode":"string","value":"gs.getMessageLang(\"Thank you for chatting with me! If you have any more questions or just want to chat, feel free to come back anytime. Have a wonderful day!\", vaContext.getRequesterLang())"},"id":"8bc8da63ac604ae4a7eaa497a9e042cb","name":"End"},{"type":"TextOutputPrompt","type":"TextOutputPrompt","value":[{"type":"String","type":"String","mode":"string","value":"gs.getMessageLang(\"How can I help you today?\", vaContext.getRequesterLang())"}],"id":"070a6ea8fd204eb49ef51a156ed86795","name":"Bot loop","goal_id":"primary","applicability":{"type":"Applicability","type":"Applicability","mode":"script","value":"true"},"secure":false},{"type":"Decision","type":"Decision","name":"Continue to chat","branches":[{"type":"Branch","type":"Branch","label":"no","expression":{"type":"Applicability","type":"Applicability","mode":"query","value":"client_input=end"},"id":"a0876fe16f9443e1a37966a00f80b7c6","name":"no"},{"type":"Branch","type":"Branch","label":"Yes","expression":{"type":"Applicability","type":"Applicability","mode":"query","value":"client_input!=end"},"id":"93126d0a4da245f598f8b456415f171c","name":"Yes"}],"id":"5f65a93f34854a338f3a035753b870e8","goal_id":"primary"},{"type":"InputPrompt","type":"InputPrompt","variable_id":"18e490eab78a443486534b2d49908abe","message":{"type":"String","type":"String","mode":"script","value":"(function execute() {\n    /* Return a quoted string.  For example:\n\n       if (vaInputs.first_name == 'Bill') {\n           return gs.getMessageLang(\"hi there {0}\", vaContext.getRequesterLang(), [vaInputs.first_name]);\n       } else {\n           return gs.getMessageLang(\"how are you {0}\", vaContext.getRequesterLang(), [vaInputs.last_name]);\n       }\n    */\n    if(vaInputs.case_list)\n    return vaInputs.case_list;\n    else{return \"I can act as a AI assistant\"}\n})()\n"},"nlu_entity_binding":{"type":"NLUEntityBinding","allow_text_input":false,"use_confirmation_prompt":true},"skippable":{"type":"Applicability","type":"Applicability","mode":"script","value":"false"},"id":"893a2024747243e09856a99860720aef","name":"Client input","goal_id":"primary","applicability":{"type":"Applicability","type":"Applicability","mode":"script","value":"true"},"formatType":"Text","validationScript":""},{"type":"ScriptedAction","type":"ScriptedAction","script":"(function execute() {\n  // if (!vaInputs.case_list2)\n  // {vaInputs.case_list2 =\"\";}\n    var request = new sn_ws.RESTMessageV2();\n    request.setHttpMethod(\"POST\");\n    request.setEndpoint('https://api.edenai.run/v2/text/question_answer');\n    request.setRequestHeader('Accept', 'application/json');\n    request.setRequestHeader('Content-Type', 'application/json');\n    request.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNWZhZmI1OGYtZDg0Yi00NDkyLTkzYTEtYTA1NmM2YTg4ZmM0IiwidHlwZSI6ImFwaV90b2tlbiJ9.a-bwPGUL665CIISwTKGVUHybU3Zgp8dRGckT7nqfwfQ');\n    var obj = {\n  \"examples\": [\n    [\n      \"something\",\n      \"something\"\n    ]\n  ],\n  \"examples_context\": \"something\",\n  \"providers\": [\n\"openai\"\n  ],\n  \"question\": vaInputs.client_input+\"\",\n  \"texts\": [\n    \"&lt;string&gt;\",\n    \"&lt;string&gt;\"\n  ],\n  \"settings\": {},\n  \"response_as_dict\": true,\n  \"attributes_as_list\": false,\n  \"show_original_response\": false,\n  \"temperature\": 0\n}\n\ntry{\n  vaInputs.case_list2=String(vaInputs.case_list2+vaInputs.client_input+\",\")\ngs.info(vaInputs.case_list2+\"\")\nrequest.setRequestBody(JSON.stringify(obj));\n    var response = request.executeAsync();\n    response.waitForResponse(60);\n    \n    var json = JSON.parse(response.getBody());\n    vaInputs.case_list = json.openai.answers;\n    \n}catch(err){gs.info(err)}})()\n","id":"00eea159730445f88c0c7a4825fe36fc","name":"rest call","goal_id":"primary","applicability":{"type":"Applicability","type":"Applicability","mode":"script","value":"true"}}],"edges":[{"type":"Edge","source_node_id":"070a6ea8fd204eb49ef51a156ed86795","target_node_id":"893a2024747243e09856a99860720aef","id":"73c12238f57f43d2b51339e4143d3f5c"},{"type":"Edge","source_node_id":"00eea159730445f88c0c7a4825fe36fc","target_node_id":"5f65a93f34854a338f3a035753b870e8","id":"065fc0fa4ce64d0b94a40e1334df5d28"},{"type":"Edge","source_node_id":"0162092bc36746eb8744a8e9506d7719","target_node_id":"070a6ea8fd204eb49ef51a156ed86795","id":"d11944a356324d269c5f44ea7abbd624"},{"type":"Edge","source_node_id":"5f65a93f34854a338f3a035753b870e8","target_node_id":"8bc8da63ac604ae4a7eaa497a9e042cb","branch_id":"a0876fe16f9443e1a37966a00f80b7c6","id":"9e76849a18ed4f3cb526211fca43cc87","name":"a0876fe16f9443e1a37966a00f80b7c6"},{"type":"Edge","source_node_id":"5f65a93f34854a338f3a035753b870e8","target_node_id":"893a2024747243e09856a99860720aef","branch_id":"93126d0a4da245f598f8b456415f171c","id":"8bbf68794cd74d55bf5c509dfe6efae8","name":"93126d0a4da245f598f8b456415f171c"},{"type":"Edge","source_node_id":"893a2024747243e09856a99860720aef","target_node_id":"00eea159730445f88c0c7a4825fe36fc","id":"be464d6894f74b1db1259b3a06e0ab37"}],"id":"primary"}],"script_variables":[],"glide_variables":[{"type":"Reference","type":"Reference","table":"sys_user","id":"current-user","name":"user","formatType":"text","secure":false,"sensitive":false,"list":false},{"type":"VariableDto","type":"String","name":"client_input","list":false,"id":"18e490eab78a443486534b2d49908abe","formatType":"Text","validationScript":"","secure":false,"sensitive":false}],"applicability":{"type":"Applicability","type":"Applicability","mode":"script","value":"true"},"roles":[],"scope":"6da93b1f97c60210d433793de053af06","domain":"global","topic_type":"STANDARD","channels":[],"id":"b04b122b97120210d433793de053af12","name":"_PRVW__a138b810cba20210a8aebce91514a416","key_phrases":["Chat-bot -poc"],"nlu_provider":"","nlu_model":"","nlu_model_label":"","nlu_intent":"","nlu_intent_label":"","flexible_conversation_switching":false,"autopilot_topic":false,"design_categories":[],"triggerable_by_notification":false,"library":false,"readOnly":false,"nluMapping":"[]"}</design_definition>
+        <design_topic_id>b04b122b97120210d433793de053af12</design_topic_id>
+        <graph>{
+  "graph_api_version": "1.0.42",
+  "goals": {
+    "primary": {
+      "id": "primary",
+      "trigger": {
+        "type": "primary"
+      },
+      "name": "primary",
+      "applicability": "",
+      "description": "",
+      "nodes": {
+        "0162092bc36746eb8744a8e9506d7719": {
+          "id": "0162092bc36746eb8744a8e9506d7719",
+          "stepType": "Start",
+          "name": "Start",
+          "greetingResponse": {
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Hello there! How's your day going?"
+                  }
+                ]
+              }
+            ],
+            "mode": "simple"
+          }
+        },
+        "8bc8da63ac604ae4a7eaa497a9e042cb": {
+          "id": "8bc8da63ac604ae4a7eaa497a9e042cb",
+          "stepType": "TerminateGoal",
+          "name": "End",
+          "confirmationMessage": {
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Thank you for chatting with me! If you have any more questions or just want to chat, feel free to come back anytime. Have a wonderful day!"
+                  }
+                ]
+              }
+            ],
+            "mode": "simple"
+          }
+        },
+        "070a6ea8fd204eb49ef51a156ed86795": {
+          "id": "070a6ea8fd204eb49ef51a156ed86795",
+          "stepType": "TextOutput",
+          "name": "Bot loop",
+          "secure": false,
+          "value": [
+            {
+              "value": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "text": "How can I help you today?"
+                    }
+                  ]
+                }
+              ],
+              "mode": "simple",
+              "_key": "95a1b77bd1bb4ae9aa878cb4cca08a9b"
+            }
+          ],
+          "applicability": {
+            "value": "",
+            "mode": "query"
+          }
+        },
+        "5f65a93f34854a338f3a035753b870e8": {
+          "id": "5f65a93f34854a338f3a035753b870e8",
+          "stepType": "Decision",
+          "name": "Continue to chat"
+        },
+        "893a2024747243e09856a99860720aef": {
+          "id": "893a2024747243e09856a99860720aef",
+          "stepType": "Prompt",
+          "name": "Client input",
+          "prompt": {
+            "value": "(function execute() {\n    /* Return a quoted string.  For example:\n\n       if (vaInputs.first_name == 'Bill') {\n           return gs.getMessageLang(\"hi there {0}\", vaContext.getRequesterLang(), [vaInputs.first_name]);\n       } else {\n           return gs.getMessageLang(\"how are you {0}\", vaContext.getRequesterLang(), [vaInputs.last_name]);\n       }\n    */\n    if(vaInputs.case_list)\n    return vaInputs.case_list;\n    else{return \"I can act as a AI assistant\"}\n})()\n",
+            "mode": "script"
+          },
+          "confirmMessage": {
+            "value": "",
+            "mode": "simple"
+          },
+          "acknowledgeMsg": {
+            "value": "",
+            "mode": "simple"
+          },
+          "applicability": {
+            "value": "",
+            "mode": "query"
+          },
+          "skippable": {
+            "value": "",
+            "mode": "query"
+          },
+          "defaultValue": {
+            "value": "",
+            "mode": "simple"
+          },
+          "withNluUserInput": false,
+          "skipIfFulfilled": false,
+          "variableId": "18e490eab78a443486534b2d49908abe",
+          "inputType": {
+            "format": "Text",
+            "script": ""
+          }
+        },
+        "00eea159730445f88c0c7a4825fe36fc": {
+          "id": "00eea159730445f88c0c7a4825fe36fc",
+          "name": "rest call",
+          "script": "(function execute() {\n  // if (!vaInputs.case_list2)\n  // {vaInputs.case_list2 =\"\";}\n    var request = new sn_ws.RESTMessageV2();\n    request.setHttpMethod(\"POST\");\n    request.setEndpoint('https://api.edenai.run/v2/text/question_answer');\n    request.setRequestHeader('Accept', 'application/json');\n    request.setRequestHeader('Content-Type', 'application/json');\n    request.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNWZhZmI1OGYtZDg0Yi00NDkyLTkzYTEtYTA1NmM2YTg4ZmM0IiwidHlwZSI6ImFwaV90b2tlbiJ9.a-bwPGUL665CIISwTKGVUHybU3Zgp8dRGckT7nqfwfQ');\n    var obj = {\n  \"examples\": [\n    [\n      \"something\",\n      \"something\"\n    ]\n  ],\n  \"examples_context\": \"something\",\n  \"providers\": [\n\"openai\"\n  ],\n  \"question\": vaInputs.client_input+\"\",\n  \"texts\": [\n    \"&lt;string&gt;\",\n    \"&lt;string&gt;\"\n  ],\n  \"settings\": {},\n  \"response_as_dict\": true,\n  \"attributes_as_list\": false,\n  \"show_original_response\": false,\n  \"temperature\": 0\n}\n\ntry{\n  vaInputs.case_list2=String(vaInputs.case_list2+vaInputs.client_input+\",\")\ngs.info(vaInputs.case_list2+\"\")\nrequest.setRequestBody(JSON.stringify(obj));\n    var response = request.executeAsync();\n    response.waitForResponse(60);\n    \n    var json = JSON.parse(response.getBody());\n    vaInputs.case_list = json.openai.answers;\n    \n}catch(err){gs.info(err)}})()\n",
+          "stepType": "ScriptAction",
+          "applicability": {
+            "value": "",
+            "mode": "query"
+          }
+        }
+      },
+      "edges": [
+        {
+          "id": "73c12238f57f43d2b51339e4143d3f5c",
+          "edgeType": "Edge",
+          "source": "070a6ea8fd204eb49ef51a156ed86795",
+          "target": "893a2024747243e09856a99860720aef",
+          "sourcePort": "",
+          "targetPort": ""
+        },
+        {
+          "id": "065fc0fa4ce64d0b94a40e1334df5d28",
+          "edgeType": "Edge",
+          "source": "00eea159730445f88c0c7a4825fe36fc",
+          "target": "5f65a93f34854a338f3a035753b870e8",
+          "sourcePort": "",
+          "targetPort": ""
+        },
+        {
+          "id": "d11944a356324d269c5f44ea7abbd624",
+          "edgeType": "Edge",
+          "source": "0162092bc36746eb8744a8e9506d7719",
+          "target": "070a6ea8fd204eb49ef51a156ed86795",
+          "sourcePort": "",
+          "targetPort": ""
+        },
+        {
+          "id": "9e76849a18ed4f3cb526211fca43cc87",
+          "edgeType": "Branch",
+          "source": "5f65a93f34854a338f3a035753b870e8",
+          "target": "8bc8da63ac604ae4a7eaa497a9e042cb",
+          "sourcePort": "",
+          "targetPort": "",
+          "expression": {
+            "value": "vaInputs.client_input=end",
+            "mode": "query"
+          },
+          "label": "no"
+        },
+        {
+          "id": "8bbf68794cd74d55bf5c509dfe6efae8",
+          "edgeType": "Branch",
+          "source": "5f65a93f34854a338f3a035753b870e8",
+          "target": "893a2024747243e09856a99860720aef",
+          "sourcePort": "",
+          "targetPort": "",
+          "expression": {
+            "value": "vaInputs.client_input!=end",
+            "mode": "query"
+          },
+          "label": "Yes"
+        },
+        {
+          "id": "be464d6894f74b1db1259b3a06e0ab37",
+          "edgeType": "Edge",
+          "source": "893a2024747243e09856a99860720aef",
+          "target": "00eea159730445f88c0c7a4825fe36fc",
+          "sourcePort": "",
+          "targetPort": ""
+        }
+      ]
+    }
+  },
+  "variables": {
+    "current-user": {
+      "category": "vaInputs",
+      "id": "current-user",
+      "label": "User",
+      "name": "user",
+      "table": "sys_user",
+      "varType": "reference"
+    },
+    "18e490eab78a443486534b2d49908abe": {
+      "id": "18e490eab78a443486534b2d49908abe",
+      "name": "client_input",
+      "label": "Client Input",
+      "varType": "string",
+      "secure": false,
+      "category": "vaInputs",
+      "encryptionHashFunction": "SHA-256",
+      "encryptionSalt": {
+        "value": "MTcxNjgwMTAyMTY1NSBWQSBEZXNpZ25lciBpcyBhd2Vzb21l",
+        "mode": "simple"
+      },
+      "nodeId": "893a2024747243e09856a99860720aef",
+      "isHidden": false
+    }
+  }
+}</graph>
+        <name>_PRVW__a138b810cba20210a8aebce91514a416</name>
+        <sys_class_name>sys_cb_design_topic</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-05-29 09:48:46</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_id>0e38b81097a20210d433793de053af1d</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>FlowTopic</sys_name>
+        <sys_package display_value="NeedIt Virtual Agent Conversations" source="x_1331320_needit_v">6da93b1f97c60210d433793de053af06</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="NeedIt Virtual Agent Conversations">6da93b1f97c60210d433793de053af06</sys_scope>
+        <sys_update_name>sys_cb_design_topic_0e38b81097a20210d433793de053af1d</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-05-29 09:48:46</sys_updated_on>
+        <type>FlowTopic</type>
+    </sys_cb_design_topic>
+</record_update>
